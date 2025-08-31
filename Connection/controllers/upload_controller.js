@@ -2,7 +2,7 @@ const { Storage } = require('@google-cloud/storage');
 const path = require('path');
 const fs = require('fs');
 
-// Khởi tạo GCP Storage
+// Initial GCP Storage
 const storage = new Storage({
   keyFilename: '/Users/mac/Desktop/node-postgres-demo/gcp-steve-123-232643f6d449.json',
   projectId: 'gcp-steve-123',
@@ -10,9 +10,6 @@ const storage = new Storage({
 
 const BUCKET_NAME = 'bucket_uploads_prod'; // bucket duy nhất
 
-// =====================
-// Liệt kê file trong bucket theo user
-// =====================
 const index = async (req, res) => {
   try {
     const folderPath = `Users/_${req.user.user_id}/documents/`; // folder theo user
@@ -36,9 +33,7 @@ const index = async (req, res) => {
   }
 };
 
-// =====================
-// Upload file lên bucket theo user
-// =====================
+
 const create = async (req, res) => {
   try {
     const file = req.file;
@@ -52,7 +47,7 @@ const create = async (req, res) => {
       metadata: { contentType: file.mimetype },
     });
 
-    // Xoá file temp local
+    
     fs.unlinkSync(file.path);
 
     res.json({
@@ -66,9 +61,7 @@ const create = async (req, res) => {
   }
 };
 
-// =====================
-// Xóa file trong bucket theo user
-// =====================
+
 const destroy = async (req, res) => {
   try {
     const filename = req.params.filename;
