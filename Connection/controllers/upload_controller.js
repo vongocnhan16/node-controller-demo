@@ -8,18 +8,17 @@ const storage = new Storage({
   projectId: 'gcp-steve-123',
 });
 
-const BUCKET_NAME = 'bucket_uploads_prod'; // bucket duy nhất
+const BUCKET_NAME = 'bucket_uploads_prod'; 
 
 const index = async (req, res) => {
   try {
-    const folderPath = `Users/_${req.user.user_id}/documents/`; // folder theo user
-
+    const folderPath = `Users/_${req.user.user_id}/documents/`; 
     const [files] = await storage.bucket(BUCKET_NAME).getFiles({
       prefix: folderPath,
     });
 
     const fileList = files.map(file => ({
-      name: file.name.replace(folderPath, ''), // chỉ lấy tên file
+      name: file.name.replace(folderPath, ''), 
       url: file.publicUrl(),
       size: file.metadata.size,
       content_type: file.metadata.contentType,
@@ -39,7 +38,7 @@ const create = async (req, res) => {
     const file = req.file;
     if (!file) return res.status(400).json({ error: 'No file uploaded' });
 
-    const folderPath = `Users/_${req.user.user_id}/documents/`; // folder theo user
+    const folderPath = `Users/_${req.user.user_id}/documents/`; 
     const pathInBucket = `${folderPath}${Date.now()}_${file.originalname}`;
 
     const [uploadedFile] = await storage.bucket(BUCKET_NAME).upload(file.path, {
@@ -65,7 +64,7 @@ const create = async (req, res) => {
 const destroy = async (req, res) => {
   try {
     const filename = req.params.filename;
-    const folderPath = `Users/_${req.user.user_id}/documents/`; // folder theo user
+    const folderPath = `Users/_${req.user.user_id}/documents/`; 
 
     const file = storage.bucket(BUCKET_NAME).file(`${folderPath}${filename}`);
     await file.delete();
